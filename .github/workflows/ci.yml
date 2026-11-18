@@ -15,9 +15,52 @@ jobs:
       - run: uv run ruff check .
       - run: uv run pytest
 
+  retrieval-eval:
+    # boots the API against a real pgvector database, loads the corpus and runs the benchmark
+    runs-on: ubuntu-latest
+    needs: test
+    services:
+      db:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: rag
+          POSTGRES_PASSWORD: rag
+          POSTGRES_DB: rag
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U rag" --health-interval 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://rag:rag@localhost:5432/rag
+      INIT_SCHEMA_ON_STARTUP: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - name: Start API
+        run: |
+          uv run uvicorn app.main:app --port 8000 &
+          timeout 60 bash -c 'until curl -sf localhost:8000/ready; do sleep 1; done'
+      - run: uv run python eval/ingest_corpus.py
+      - run: uv run python eval/retrieval_eval.py --out eval-report.json | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-eval
+          path: eval-report.json
+
   docker:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: actions/checkout@v4
       - run: docker build -t rag-platform .
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init -backend=false
+      - run: terraform validate
