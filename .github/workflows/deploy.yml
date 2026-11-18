@@ -1,0 +1,78 @@
+name: Deploy to AWS
+
+# Runs after CI passes on main. Set the repository variables AWS_ROLE_ARN and AWS_REGION
+# (from `terraform output`) to enable it; until then the job is skipped.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # OIDC: exchange the GitHub token for short-lived AWS credentials
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  PROJECT: rag-platform
+
+jobs:
+  deploy:
+    if: >-
+      vars.AWS_ROLE_ARN != '' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.url.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      - id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        id: image
+        env:
+          IMAGE: ${{ steps.ecr.outputs.registry }}/${{ env.PROJECT }}
+        run: |
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" .
+          docker push --all-tags "$IMAGE"
+          echo "uri=$IMAGE:${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: Render task definition with the new image
+        id: taskdef
+        run: |
+          aws ecs describe-task-definition --task-definition "$PROJECT" \
+            --query taskDefinition > task-definition.json
+      - uses: aws-actions/amazon-ecs-render-task-definition@v1
+        id: render
+        with:
+          task-definition: task-definition.json
+          container-name: api
+          image: ${{ steps.image.outputs.uri }}
+
+      - name: Deploy to ECS and wait for a healthy service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render.outputs.task-definition }}
+          cluster: ${{ env.PROJECT }}
+          service: api
+          wait-for-service-stability: true
+
+      - name: Smoke test
+        id: url
+        run: |
+          DNS=$(aws elbv2 describe-load-balancers --names "$PROJECT" \
+            --query 'LoadBalancers[0].DNSName' --output text)
+          echo "url=http://$DNS" >> "$GITHUB_OUTPUT"
+          curl -sf "http://$DNS/ready"
