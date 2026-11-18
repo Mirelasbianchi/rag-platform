@@ -1,7 +1,6 @@
 """Chunking and embeddings."""
 
-import litellm
-
+from app import embeddings
 from app.config import get_settings
 
 
@@ -32,5 +31,4 @@ def chunk_text(text: str, size: int, overlap: int) -> list[str]:
 
 def embed(texts: list[str]) -> list[list[float]]:
     settings = get_settings()
-    response = litellm.embedding(model=settings.embedding_model, input=texts)
-    return [item["embedding"] for item in response.data]
+    return embeddings.embed(texts, settings.embedding_model, settings.embedding_dim)

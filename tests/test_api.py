@@ -29,3 +29,14 @@ def test_search_uses_embeddings_and_db(monkeypatch):
     response = client.post("/search", json={"query": "hello", "k": 3})
     assert response.status_code == 200
     assert response.json()[0]["document_id"] == 7
+
+
+def test_hashing_embeddings_are_deterministic_and_normalized():
+    import numpy as np
+
+    from app.embeddings import hashing_embed
+
+    a, b, c = hashing_embed(["Direito do consumidor", "direito do consumidor", "outro"], 256)
+    assert a == b
+    assert abs(np.linalg.norm(a) - 1) < 1e-5
+    assert np.dot(a, b) > np.dot(a, c)
