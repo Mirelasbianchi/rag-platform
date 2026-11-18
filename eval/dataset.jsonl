@@ -1,0 +1,50 @@
+{"query": "Comprei um celular pela internet e me arrependi. Em quantos dias posso desistir da compra?", "expected_source": "cdc:art-49"}
+{"query": "Se eu desistir de uma compra feita por telefone, o dinheiro é devolvido?", "expected_source": "cdc:art-49"}
+{"query": "Qual o prazo para reclamar de um defeito aparente em uma geladeira?", "expected_source": "cdc:art-26"}
+{"query": "Quanto tempo tenho para reclamar de um problema em um alimento estragado?", "expected_source": "cdc:art-26"}
+{"query": "Quando começa a contar o prazo para reclamar de um defeito oculto?", "expected_source": "cdc:art-26"}
+{"query": "Em quanto tempo prescreve o pedido de indenização por acidente causado por produto defeituoso?", "expected_source": "cdc:art-27"}
+{"query": "A loja não consertou meu produto em 30 dias. O que posso exigir?", "expected_source": "cdc:art-18"}
+{"query": "Posso pedir meu dinheiro de volta se o vício do produto não for sanado?", "expected_source": "cdc:art-18"}
+{"query": "Produto com prazo de validade vencido é considerado impróprio para consumo?", "expected_source": "cdc:art-18"}
+{"query": "O pacote de arroz veio com menos peso do que o indicado na embalagem. Quais são meus direitos?", "expected_source": "cdc:art-19"}
+{"query": "O serviço prestado ficou malfeito. Posso exigir que seja refeito sem custo?", "expected_source": "cdc:art-20"}
+{"query": "A oficina pode usar peças usadas no conserto do meu carro sem eu autorizar?", "expected_source": "cdc:art-21"}
+{"query": "A empresa recebeu um produto que eu não pedi e quer cobrar. Sou obrigado a pagar?", "expected_source": "cdc:art-39"}
+{"query": "A loja pode exigir que eu compre outro produto para vender o que eu quero (venda casada)?", "expected_source": "cdc:art-39"}
+{"query": "O prestador de serviço precisa me dar um orçamento antes de começar o trabalho?", "expected_source": "cdc:art-40"}
+{"query": "Por quantos dias vale um orçamento de serviço?", "expected_source": "cdc:art-40"}
+{"query": "Fui cobrado duas vezes indevidamente. Tenho direito a receber em dobro?", "expected_source": "cdc:art-42"}
+{"query": "O cobrador pode me ameaçar ou me constranger por causa de uma dívida atrasada?", "expected_source": "cdc:art-42"}
+{"query": "Por quanto tempo meu nome pode ficar negativado no cadastro de inadimplentes?", "expected_source": "cdc:art-43"}
+{"query": "Encontrei um erro nos meus dados no Serasa. Em quanto tempo deve ser corrigido?", "expected_source": "cdc:art-43"}
+{"query": "Qual o valor máximo da multa por atraso no pagamento de uma prestação?", "expected_source": "cdc:art-52"}
+{"query": "Posso quitar meu financiamento antes do prazo com desconto dos juros?", "expected_source": "cdc:art-52"}
+{"query": "Uma cláusula de contrato que me obriga a usar arbitragem é válida?", "expected_source": "cdc:art-51"}
+{"query": "O contrato permite que a empresa mude o preço sozinha. Essa cláusula é nula?", "expected_source": "cdc:art-51"}
+{"query": "Como devem ser interpretadas as cláusulas de um contrato de consumo?", "expected_source": "cdc:art-47"}
+{"query": "Qual o tamanho mínimo de letra em um contrato de adesão?", "expected_source": "cdc:art-54"}
+{"query": "O que é um contrato de adesão?", "expected_source": "cdc:art-54"}
+{"query": "A propaganda anunciou um preço e a loja se recusa a cumprir. O que posso fazer?", "expected_source": "cdc:art-35"}
+{"query": "Uma promoção divulgada no anúncio obriga o fornecedor?", "expected_source": "cdc:art-30"}
+{"query": "O que é publicidade enganosa por omissão?", "expected_source": "cdc:art-37"}
+{"query": "Propaganda que se aproveita da inexperiência de crianças é permitida?", "expected_source": "cdc:art-37"}
+{"query": "Quem tem que provar que uma propaganda é verdadeira?", "expected_source": "cdc:art-38"}
+{"query": "Quem é considerado consumidor pela lei?", "expected_source": "cdc:art-2"}
+{"query": "Serviços bancários e de cartão de crédito são relação de consumo?", "expected_source": "cdc:art-3"}
+{"query": "Quais são os direitos básicos do consumidor, como a inversão do ônus da prova?", "expected_source": "cdc:art-6"}
+{"query": "O fabricante responde por danos de um produto defeituoso mesmo sem ter culpa?", "expected_source": "cdc:art-12"}
+{"query": "Quando o supermercado é responsável por um produto defeituoso no lugar do fabricante?", "expected_source": "cdc:art-13"}
+{"query": "A responsabilidade de um médico ou advogado depende de culpa?", "expected_source": "cdc:art-14"}
+{"query": "A garantia legal precisa estar escrita em um termo?", "expected_source": "cdc:art-24"}
+{"query": "O que precisa constar no termo de garantia contratual?", "expected_source": "cdc:art-50"}
+{"query": "Por quanto tempo o fabricante deve vender peças de reposição?", "expected_source": "cdc:art-32"}
+{"query": "O que é superendividamento?", "expected_source": "cdc:art-54-a"}
+{"query": "O banco pode anunciar empréstimo sem consulta ao SPC?", "expected_source": "cdc:art-54-c"}
+{"query": "Contestei uma compra no cartão de crédito. A administradora pode continuar cobrando?", "expected_source": "cdc:art-54-g"}
+{"query": "Quais sanções administrativas uma empresa pode sofrer por infringir o CDC?", "expected_source": "cdc:art-56"}
+{"query": "Qual o valor máximo da multa administrativa aplicada pelo Procon?", "expected_source": "cdc:art-57"}
+{"query": "O que é contrapropaganda e quando ela é aplicada?", "expected_source": "cdc:art-60"}
+{"query": "O juiz pode desconsiderar a personalidade jurídica da empresa para eu ser ressarcido?", "expected_source": "cdc:art-28"}
+{"query": "Serviços públicos essenciais como água e luz devem ser contínuos?", "expected_source": "cdc:art-22"}
+{"query": "Um fornecedor que descobre que seu produto é perigoso depois de vendê-lo precisa avisar os consumidores?", "expected_source": "cdc:art-10"}

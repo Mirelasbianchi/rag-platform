@@ -1,0 +1,446 @@
+{
+  "timestamp": "2026-11-18T14:06:15+00:00",
+  "embedding_model": "local/hashing",
+  "dataset": "dataset.jsonl",
+  "results": [
+    {
+      "mode": "vector",
+      "cases": 50,
+      "recall@1": 0.4,
+      "recall@3": 0.66,
+      "recall@5": 0.72,
+      "recall@10": 0.8,
+      "mrr@10": 0.5435,
+      "latency_ms_p50": 3.8,
+      "latency_ms_p95": 5.3,
+      "not_at_rank_1": [
+        {
+          "query": "Comprei um celular pela internet e me arrependi. Em quantos dias posso desistir da compra?",
+          "expected": "cdc:art-49",
+          "rank": null
+        },
+        {
+          "query": "Quanto tempo tenho para reclamar de um problema em um alimento estragado?",
+          "expected": "cdc:art-26",
+          "rank": null
+        },
+        {
+          "query": "Quando começa a contar o prazo para reclamar de um defeito oculto?",
+          "expected": "cdc:art-26",
+          "rank": 5
+        },
+        {
+          "query": "Em quanto tempo prescreve o pedido de indenização por acidente causado por produto defeituoso?",
+          "expected": "cdc:art-27",
+          "rank": null
+        },
+        {
+          "query": "A loja não consertou meu produto em 30 dias. O que posso exigir?",
+          "expected": "cdc:art-18",
+          "rank": 4
+        },
+        {
+          "query": "Produto com prazo de validade vencido é considerado impróprio para consumo?",
+          "expected": "cdc:art-18",
+          "rank": 2
+        },
+        {
+          "query": "O pacote de arroz veio com menos peso do que o indicado na embalagem. Quais são meus direitos?",
+          "expected": "cdc:art-19",
+          "rank": null
+        },
+        {
+          "query": "O serviço prestado ficou malfeito. Posso exigir que seja refeito sem custo?",
+          "expected": "cdc:art-20",
+          "rank": 7
+        },
+        {
+          "query": "A oficina pode usar peças usadas no conserto do meu carro sem eu autorizar?",
+          "expected": "cdc:art-21",
+          "rank": null
+        },
+        {
+          "query": "A empresa recebeu um produto que eu não pedi e quer cobrar. Sou obrigado a pagar?",
+          "expected": "cdc:art-39",
+          "rank": null
+        },
+        {
+          "query": "A loja pode exigir que eu compre outro produto para vender o que eu quero (venda casada)?",
+          "expected": "cdc:art-39",
+          "rank": null
+        },
+        {
+          "query": "O cobrador pode me ameaçar ou me constranger por causa de uma dívida atrasada?",
+          "expected": "cdc:art-42",
+          "rank": 6
+        },
+        {
+          "query": "Por quanto tempo meu nome pode ficar negativado no cadastro de inadimplentes?",
+          "expected": "cdc:art-43",
+          "rank": 3
+        },
+        {
+          "query": "Qual o valor máximo da multa por atraso no pagamento de uma prestação?",
+          "expected": "cdc:art-52",
+          "rank": 6
+        },
+        {
+          "query": "O contrato permite que a empresa mude o preço sozinha. Essa cláusula é nula?",
+          "expected": "cdc:art-51",
+          "rank": 2
+        },
+        {
+          "query": "Como devem ser interpretadas as cláusulas de um contrato de consumo?",
+          "expected": "cdc:art-47",
+          "rank": 2
+        },
+        {
+          "query": "A propaganda anunciou um preço e a loja se recusa a cumprir. O que posso fazer?",
+          "expected": "cdc:art-35",
+          "rank": null
+        },
+        {
+          "query": "Uma promoção divulgada no anúncio obriga o fornecedor?",
+          "expected": "cdc:art-30",
+          "rank": 2
+        },
+        {
+          "query": "Propaganda que se aproveita da inexperiência de crianças é permitida?",
+          "expected": "cdc:art-37",
+          "rank": 2
+        },
+        {
+          "query": "Quem tem que provar que uma propaganda é verdadeira?",
+          "expected": "cdc:art-38",
+          "rank": null
+        },
+        {
+          "query": "Quem é considerado consumidor pela lei?",
+          "expected": "cdc:art-2",
+          "rank": null
+        },
+        {
+          "query": "Serviços bancários e de cartão de crédito são relação de consumo?",
+          "expected": "cdc:art-3",
+          "rank": 6
+        },
+        {
+          "query": "O fabricante responde por danos de um produto defeituoso mesmo sem ter culpa?",
+          "expected": "cdc:art-12",
+          "rank": 2
+        },
+        {
+          "query": "Quando o supermercado é responsável por um produto defeituoso no lugar do fabricante?",
+          "expected": "cdc:art-13",
+          "rank": 2
+        },
+        {
+          "query": "A garantia legal precisa estar escrita em um termo?",
+          "expected": "cdc:art-24",
+          "rank": 4
+        },
+        {
+          "query": "O que é superendividamento?",
+          "expected": "cdc:art-54-a",
+          "rank": 3
+        },
+        {
+          "query": "O banco pode anunciar empréstimo sem consulta ao SPC?",
+          "expected": "cdc:art-54-c",
+          "rank": 2
+        },
+        {
+          "query": "Contestei uma compra no cartão de crédito. A administradora pode continuar cobrando?",
+          "expected": "cdc:art-54-g",
+          "rank": 2
+        },
+        {
+          "query": "Qual o valor máximo da multa administrativa aplicada pelo Procon?",
+          "expected": "cdc:art-57",
+          "rank": 3
+        },
+        {
+          "query": "Serviços públicos essenciais como água e luz devem ser contínuos?",
+          "expected": "cdc:art-22",
+          "rank": 3
+        }
+      ]
+    },
+    {
+      "mode": "keyword",
+      "cases": 50,
+      "recall@1": 0.48,
+      "recall@3": 0.72,
+      "recall@5": 0.8,
+      "recall@10": 0.84,
+      "mrr@10": 0.6012,
+      "latency_ms_p50": 3.8,
+      "latency_ms_p95": 5.4,
+      "not_at_rank_1": [
+        {
+          "query": "Comprei um celular pela internet e me arrependi. Em quantos dias posso desistir da compra?",
+          "expected": "cdc:art-49",
+          "rank": 3
+        },
+        {
+          "query": "Se eu desistir de uma compra feita por telefone, o dinheiro é devolvido?",
+          "expected": "cdc:art-49",
+          "rank": 4
+        },
+        {
+          "query": "Em quanto tempo prescreve o pedido de indenização por acidente causado por produto defeituoso?",
+          "expected": "cdc:art-27",
+          "rank": null
+        },
+        {
+          "query": "A loja não consertou meu produto em 30 dias. O que posso exigir?",
+          "expected": "cdc:art-18",
+          "rank": 2
+        },
+        {
+          "query": "O pacote de arroz veio com menos peso do que o indicado na embalagem. Quais são meus direitos?",
+          "expected": "cdc:art-19",
+          "rank": 3
+        },
+        {
+          "query": "A oficina pode usar peças usadas no conserto do meu carro sem eu autorizar?",
+          "expected": "cdc:art-21",
+          "rank": null
+        },
+        {
+          "query": "A empresa recebeu um produto que eu não pedi e quer cobrar. Sou obrigado a pagar?",
+          "expected": "cdc:art-39",
+          "rank": 9
+        },
+        {
+          "query": "O prestador de serviço precisa me dar um orçamento antes de começar o trabalho?",
+          "expected": "cdc:art-40",
+          "rank": 2
+        },
+        {
+          "query": "Fui cobrado duas vezes indevidamente. Tenho direito a receber em dobro?",
+          "expected": "cdc:art-42",
+          "rank": 3
+        },
+        {
+          "query": "Qual o valor máximo da multa por atraso no pagamento de uma prestação?",
+          "expected": "cdc:art-52",
+          "rank": 3
+        },
+        {
+          "query": "Uma cláusula de contrato que me obriga a usar arbitragem é válida?",
+          "expected": "cdc:art-51",
+          "rank": 2
+        },
+        {
+          "query": "O contrato permite que a empresa mude o preço sozinha. Essa cláusula é nula?",
+          "expected": "cdc:art-51",
+          "rank": 4
+        },
+        {
+          "query": "Como devem ser interpretadas as cláusulas de um contrato de consumo?",
+          "expected": "cdc:art-47",
+          "rank": null
+        },
+        {
+          "query": "A propaganda anunciou um preço e a loja se recusa a cumprir. O que posso fazer?",
+          "expected": "cdc:art-35",
+          "rank": null
+        },
+        {
+          "query": "Uma promoção divulgada no anúncio obriga o fornecedor?",
+          "expected": "cdc:art-30",
+          "rank": null
+        },
+        {
+          "query": "Quem tem que provar que uma propaganda é verdadeira?",
+          "expected": "cdc:art-38",
+          "rank": null
+        },
+        {
+          "query": "Quem é considerado consumidor pela lei?",
+          "expected": "cdc:art-2",
+          "rank": null
+        },
+        {
+          "query": "Serviços bancários e de cartão de crédito são relação de consumo?",
+          "expected": "cdc:art-3",
+          "rank": null
+        },
+        {
+          "query": "Quais são os direitos básicos do consumidor, como a inversão do ônus da prova?",
+          "expected": "cdc:art-6",
+          "rank": 2
+        },
+        {
+          "query": "A garantia legal precisa estar escrita em um termo?",
+          "expected": "cdc:art-24",
+          "rank": 3
+        },
+        {
+          "query": "O que é superendividamento?",
+          "expected": "cdc:art-54-a",
+          "rank": 3
+        },
+        {
+          "query": "O banco pode anunciar empréstimo sem consulta ao SPC?",
+          "expected": "cdc:art-54-c",
+          "rank": 4
+        },
+        {
+          "query": "Qual o valor máximo da multa administrativa aplicada pelo Procon?",
+          "expected": "cdc:art-57",
+          "rank": 2
+        },
+        {
+          "query": "O que é contrapropaganda e quando ela é aplicada?",
+          "expected": "cdc:art-60",
+          "rank": 5
+        },
+        {
+          "query": "Serviços públicos essenciais como água e luz devem ser contínuos?",
+          "expected": "cdc:art-22",
+          "rank": 3
+        },
+        {
+          "query": "Um fornecedor que descobre que seu produto é perigoso depois de vendê-lo precisa avisar os consumidores?",
+          "expected": "cdc:art-10",
+          "rank": 6
+        }
+      ]
+    },
+    {
+      "mode": "hybrid",
+      "cases": 50,
+      "recall@1": 0.52,
+      "recall@3": 0.74,
+      "recall@5": 0.78,
+      "recall@10": 0.86,
+      "mrr@10": 0.6373,
+      "latency_ms_p50": 6.0,
+      "latency_ms_p95": 7.4,
+      "not_at_rank_1": [
+        {
+          "query": "Comprei um celular pela internet e me arrependi. Em quantos dias posso desistir da compra?",
+          "expected": "cdc:art-49",
+          "rank": null
+        },
+        {
+          "query": "Quanto tempo tenho para reclamar de um problema em um alimento estragado?",
+          "expected": "cdc:art-26",
+          "rank": 10
+        },
+        {
+          "query": "Quando começa a contar o prazo para reclamar de um defeito oculto?",
+          "expected": "cdc:art-26",
+          "rank": 2
+        },
+        {
+          "query": "Em quanto tempo prescreve o pedido de indenização por acidente causado por produto defeituoso?",
+          "expected": "cdc:art-27",
+          "rank": 9
+        },
+        {
+          "query": "A loja não consertou meu produto em 30 dias. O que posso exigir?",
+          "expected": "cdc:art-18",
+          "rank": 2
+        },
+        {
+          "query": "O pacote de arroz veio com menos peso do que o indicado na embalagem. Quais são meus direitos?",
+          "expected": "cdc:art-19",
+          "rank": 7
+        },
+        {
+          "query": "O serviço prestado ficou malfeito. Posso exigir que seja refeito sem custo?",
+          "expected": "cdc:art-20",
+          "rank": 3
+        },
+        {
+          "query": "A oficina pode usar peças usadas no conserto do meu carro sem eu autorizar?",
+          "expected": "cdc:art-21",
+          "rank": null
+        },
+        {
+          "query": "A empresa recebeu um produto que eu não pedi e quer cobrar. Sou obrigado a pagar?",
+          "expected": "cdc:art-39",
+          "rank": null
+        },
+        {
+          "query": "A loja pode exigir que eu compre outro produto para vender o que eu quero (venda casada)?",
+          "expected": "cdc:art-39",
+          "rank": 3
+        },
+        {
+          "query": "Qual o valor máximo da multa por atraso no pagamento de uma prestação?",
+          "expected": "cdc:art-52",
+          "rank": 5
+        },
+        {
+          "query": "O contrato permite que a empresa mude o preço sozinha. Essa cláusula é nula?",
+          "expected": "cdc:art-51",
+          "rank": 2
+        },
+        {
+          "query": "Como devem ser interpretadas as cláusulas de um contrato de consumo?",
+          "expected": "cdc:art-47",
+          "rank": null
+        },
+        {
+          "query": "A propaganda anunciou um preço e a loja se recusa a cumprir. O que posso fazer?",
+          "expected": "cdc:art-35",
+          "rank": 5
+        },
+        {
+          "query": "Uma promoção divulgada no anúncio obriga o fornecedor?",
+          "expected": "cdc:art-30",
+          "rank": 9
+        },
+        {
+          "query": "Quem tem que provar que uma propaganda é verdadeira?",
+          "expected": "cdc:art-38",
+          "rank": null
+        },
+        {
+          "query": "Quem é considerado consumidor pela lei?",
+          "expected": "cdc:art-2",
+          "rank": null
+        },
+        {
+          "query": "Serviços bancários e de cartão de crédito são relação de consumo?",
+          "expected": "cdc:art-3",
+          "rank": null
+        },
+        {
+          "query": "Quando o supermercado é responsável por um produto defeituoso no lugar do fabricante?",
+          "expected": "cdc:art-13",
+          "rank": 2
+        },
+        {
+          "query": "A garantia legal precisa estar escrita em um termo?",
+          "expected": "cdc:art-24",
+          "rank": 3
+        },
+        {
+          "query": "O banco pode anunciar empréstimo sem consulta ao SPC?",
+          "expected": "cdc:art-54-c",
+          "rank": 2
+        },
+        {
+          "query": "Contestei uma compra no cartão de crédito. A administradora pode continuar cobrando?",
+          "expected": "cdc:art-54-g",
+          "rank": 2
+        },
+        {
+          "query": "Qual o valor máximo da multa administrativa aplicada pelo Procon?",
+          "expected": "cdc:art-57",
+          "rank": 2
+        },
+        {
+          "query": "Um fornecedor que descobre que seu produto é perigoso depois de vendê-lo precisa avisar os consumidores?",
+          "expected": "cdc:art-10",
+          "rank": 2
+        }
+      ]
+    }
+  ]
+}
