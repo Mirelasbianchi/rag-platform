@@ -61,3 +61,9 @@ def test_responses_carry_request_id_and_latency():
     response = client.get("/health", headers={"x-request-id": "abc"})
     assert response.headers["X-Request-ID"] == "abc"
     assert float(response.headers["X-Response-Time-ms"]) >= 0
+
+
+def test_playground_is_served():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "Ask the documents a question" in response.text

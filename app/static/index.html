@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG Platform · Playground</title>
+<style>
+@font-face { font-family: "Instrument Sans"; src: url(/static/fonts/instrument-sans-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Instrument Sans"; src: url(/static/fonts/instrument-sans-latin-600-normal.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url(/static/fonts/newsreader-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url(/static/fonts/newsreader-latin-500-normal.woff2) format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url(/static/fonts/newsreader-latin-400-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  --paper: #eef1f4;
+  --sheet: #fbfcfd;
+  --ink: #18222f;
+  --muted: #5b6878;
+  --rule: #cbd3dc;
+  --marker: #f2d64b;
+  --marker-soft: #f8eaa2;
+  --signal: #2f5bd3;
+  --sans: "Instrument Sans", system-ui, sans-serif;
+  --serif: "Newsreader", Georgia, serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); }
+body { margin: 0; font: 400 15px/1.5 var(--sans); }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+header {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  padding: 1.1rem clamp(1rem, 4vw, 3rem); border-bottom: 1px solid var(--rule);
+}
+.brand { font-weight: 600; font-size: 1.05rem; letter-spacing: -0.01em; }
+.brand span { color: var(--muted); font-weight: 400; }
+.corpus { color: var(--muted); font-size: 0.9rem; display: flex; gap: 1rem; align-items: baseline; }
+.corpus label { color: var(--signal); cursor: pointer; font-weight: 600; }
+.corpus input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+
+main {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1.5rem, 4vw, 4rem); padding: clamp(1.5rem, 4vw, 3rem);
+  max-width: 1440px; margin: 0 auto;
+}
+@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+
+.ask h1 {
+  font: 500 clamp(2rem, 3.4vw, 2.9rem)/1.08 var(--serif); letter-spacing: -0.02em;
+  margin: 0 0 1.4rem; max-width: 16ch;
+}
+form { display: grid; gap: 0.75rem; }
+textarea {
+  width: 100%; min-height: 6.5rem; resize: vertical; padding: 0.9rem 1rem;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px;
+  font: 400 1.2rem/1.4 var(--serif);
+}
+.controls { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.modes { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; background: var(--sheet); }
+.modes button {
+  border: 0; background: none; padding: 0.35rem 0.9rem; border-radius: 999px; cursor: pointer; color: var(--muted);
+}
+.modes button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+.go {
+  border: 0; border-radius: 6px; padding: 0.6rem 1.3rem; background: var(--signal); color: #fff;
+  font-weight: 600; cursor: pointer;
+}
+.go[disabled] { opacity: 0.6; cursor: progress; }
+.examples { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+.examples button {
+  border: 1px dashed var(--rule); background: none; border-radius: 4px; padding: 0.25rem 0.6rem;
+  color: var(--muted); font-size: 0.85rem; cursor: pointer; text-align: left;
+}
+.examples button:hover { color: var(--ink); border-color: var(--muted); }
+
+.answer { margin-top: 2.2rem; min-height: 8rem; }
+.answer p { font: 400 1.32rem/1.55 var(--serif); margin: 0; max-width: 34em; }
+.answer .meta { margin-top: 0.9rem; color: var(--muted); font-size: 0.85rem; }
+.answer .empty { color: var(--muted); font: italic 400 1.1rem/1.5 var(--serif); }
+mark.cite {
+  background: linear-gradient(transparent 12%, var(--marker) 12%, var(--marker) 88%, transparent 88%);
+  color: var(--ink); padding: 0 0.15em; border-radius: 2px; cursor: pointer;
+  font: 600 0.78em var(--sans); vertical-align: 0.1em;
+}
+
+.passages h2 { font-size: 0.95rem; font-weight: 600; margin: 0 0 0.9rem; display: flex; justify-content: space-between; }
+.passages h2 span { color: var(--muted); font-weight: 400; }
+ol.hits { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+.hit {
+  display: grid; grid-template-columns: 2.2rem 1fr; gap: 0.2rem 0.6rem;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 0.9rem 1rem 1rem 0.7rem;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+.hit.lit { background: var(--marker-soft); border-color: var(--marker); }
+.rank { font: 500 1.5rem/1 var(--serif); color: var(--muted); text-align: right; }
+.hit header { all: unset; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.hit .title { font-weight: 600; }
+.hit .score { display: flex; gap: 0.5rem; align-items: center; color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+.bar { width: 64px; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--ink); }
+.hit .text { grid-column: 2; font: 400 1rem/1.5 var(--serif); color: #2c3846; white-space: pre-line; }
+.placeholder { color: var(--muted); border: 1px dashed var(--rule); border-radius: 6px; padding: 2rem; text-align: center; }
+.toast { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--sheet); padding: 0.6rem 1rem; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">RAG Platform <span>playground</span></div>
+  <div class="corpus">
+    <span id="corpus">Loading documents…</span>
+    <label for="file">Add document</label>
+    <input id="file" type="file" accept=".md,.markdown,.txt">
+  </div>
+</header>
+
+<main>
+  <section class="ask">
+    <h1>Ask the documents a question.</h1>
+    <form id="form">
+      <textarea id="q" placeholder="e.g. Posso desistir de uma compra feita por telefone?" required></textarea>
+      <div class="controls">
+        <div class="modes" role="group" aria-label="Retrieval mode">
+          <button type="button" data-mode="hybrid" aria-pressed="true">Hybrid</button>
+          <button type="button" data-mode="vector" aria-pressed="false">Vector</button>
+          <button type="button" data-mode="keyword" aria-pressed="false">Keyword</button>
+        </div>
+        <button class="go" id="go" type="submit">Ask</button>
+      </div>
+      <div class="examples" id="examples"></div>
+    </form>
+    <div class="answer" id="answer"><p class="empty">The answer appears here, with each claim marked by the passage it came from.</p></div>
+  </section>
+
+  <section class="passages" aria-live="polite">
+    <h2>Retrieved passages <span id="hitmeta"></span></h2>
+    <ol class="hits" id="hits"><li class="placeholder">Ranked passages from the documents will be listed here.</li></ol>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let mode = "hybrid";
+const EXAMPLES = [
+  "Posso desistir de uma compra feita por telefone? O dinheiro é devolvido?",
+  "O fornecedor pode enviar produto sem eu pedir?",
+  "Qual o valor máximo da multa por atraso no pagamento de uma prestação?",
+];
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+}
+
+async function loadCorpus() {
+  try {
+    const docs = await (await fetch("/documents")).json();
+    const chunks = docs.reduce((n, d) => n + d.chunks, 0);
+    $("corpus").textContent = docs.length
+      ? `${docs.length} documents, ${chunks} passages indexed`
+      : "No documents yet — add one to start";
+  } catch { $("corpus").textContent = "Database not reachable"; }
+}
+
+function renderHits(citations) {
+  if (!citations.length) {
+    $("hits").innerHTML = '<li class="placeholder">No passage matched. Try other words or another mode.</li>';
+    return;
+  }
+  const max = Math.max(...citations.map((c) => c.score ?? 0), 1e-9);
+  $("hits").innerHTML = citations.map((c) => `
+    <li class="hit" id="hit-${c.n}">
+      <div class="rank">${c.n}</div>
+      <header><span class="title">${escapeHtml(c.title)}</span>
+        <span class="score">${(c.score ?? 0).toFixed(3)}<span class="bar"><i style="width:${Math.round(100 * (c.score ?? 0) / max)}%"></i></span></span>
+      </header>
+      <div class="text">${escapeHtml(c.content.slice(0, 520))}${c.content.length > 520 ? "…" : ""}</div>
+    </li>`).join("");
+}
+
+function light(n, on) { const el = $("hit-" + n); if (el) el.classList.toggle("lit", on); }
+
+async function ask(question) {
+  $("go").disabled = true; $("go").textContent = "Searching…";
+  try {
+    const res = await fetch("/ask", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ question, k: 4, mode }) });
+    if (!res.ok) throw new Error(`The API answered ${res.status}.`);
+    const data = await res.json();
+    const citations = data.citations;
+    const html = escapeHtml(data.answer).replace(/\[(\d+)\]/g, '<mark class="cite" data-n="$1" tabindex="0">$1</mark>');
+    $("answer").innerHTML = `<p>${html}</p><div class="meta">${data.strategy === "llm" ? "Generated by the LLM" : "Extractive answer (no LLM configured)"} from ${citations.length} passages, ${mode} retrieval, ${Math.round(data.latency_ms)} ms</div>`;
+    $("hitmeta").textContent = `${mode}, top ${citations.length}`;
+    renderHits(citations);
+    document.querySelectorAll("mark.cite").forEach((m) => {
+      ["mouseenter", "focus"].forEach((e) => m.addEventListener(e, () => light(m.dataset.n, true)));
+      ["mouseleave", "blur"].forEach((e) => m.addEventListener(e, () => light(m.dataset.n, false)));
+      m.addEventListener("click", () => $("hit-" + m.dataset.n)?.scrollIntoView({ behavior: "smooth", block: "center" }));
+    });
+  } catch (err) {
+    $("answer").innerHTML = `<p class="empty">${escapeHtml(err.message)} Check that the API and database are running.</p>`;
+  } finally { $("go").disabled = false; $("go").textContent = "Ask"; }
+}
+
+document.querySelectorAll(".modes button").forEach((b) => b.addEventListener("click", () => {
+  mode = b.dataset.mode;
+  document.querySelectorAll(".modes button").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+  if ($("q").value.trim()) ask($("q").value.trim());
+}));
+$("form").addEventListener("submit", (e) => { e.preventDefault(); ask($("q").value.trim()); });
+$("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) $("form").requestSubmit(); });
+$("examples").innerHTML = EXAMPLES.map((q) => `<button type="button">${escapeHtml(q)}</button>`).join("");
+$("examples").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { $("q").value = b.textContent; ask(b.textContent); }));
+$("file").addEventListener("change", async () => {
+  const file = $("file").files[0]; if (!file) return;
+  const body = new FormData(); body.append("file", file);
+  const res = await fetch("/documents/upload", { method: "POST", body });
+  const toast = document.createElement("div"); toast.className = "toast";
+  toast.textContent = res.ok ? `Added ${file.name} (${(await res.json()).chunks} passages)` : `Could not add ${file.name}: ${res.status}`;
+  document.body.append(toast); setTimeout(() => toast.remove(), 3500);
+  loadCorpus();
+});
+loadCorpus();
+</script>
+</body>
+</html>

@@ -3,10 +3,10 @@ from fastapi.testclient import TestClient
 from app import answer, main
 
 HITS = [
-    {"chunk_id": 1, "document_id": 1, "title": "Art. 26", "source": "cdc",
+    {"chunk_id": 1, "document_id": 1, "title": "Art. 26", "source": "cdc", "score": 0.5,
      "content": "O direito de reclamar caduca em trinta dias para produtos não duráveis. "
                 "Outro assunto qualquer."},
-    {"chunk_id": 2, "document_id": 2, "title": "Art. 49", "source": "cdc",
+    {"chunk_id": 2, "document_id": 2, "title": "Art. 49", "source": "cdc", "score": 0.5,
      "content": "O consumidor pode desistir do contrato no prazo de 7 dias."},
 ]
 
