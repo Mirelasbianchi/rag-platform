@@ -10,7 +10,7 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.pyplot as plt
 
 # categorical slots 1-3 of the validated reference palette (all-pairs safe for 3 series)
 COLORS = {"hybrid": "#2a78d6", "keyword": "#eb6834", "vector": "#1baf7a"}
