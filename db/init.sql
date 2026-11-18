@@ -12,8 +12,13 @@ CREATE TABLE IF NOT EXISTS chunks (
     document_id  BIGINT NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
     position     INT NOT NULL,
     content      TEXT NOT NULL,
-    embedding    vector(1536) NOT NULL
+    embedding    vector(1536) NOT NULL,
+    -- full-text index for keyword and hybrid search
+    content_tsv  tsvector GENERATED ALWAYS AS (to_tsvector('portuguese', content)) STORED
 );
 
 CREATE INDEX IF NOT EXISTS chunks_embedding_idx
     ON chunks USING hnsw (embedding vector_cosine_ops);
+
+CREATE INDEX IF NOT EXISTS chunks_content_tsv_idx
+    ON chunks USING gin (content_tsv);

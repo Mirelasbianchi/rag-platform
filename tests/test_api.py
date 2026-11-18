@@ -18,15 +18,17 @@ def test_chunk_text_respects_size():
 
 
 def test_search_uses_embeddings_and_db(monkeypatch):
-    monkeypatch.setattr(main.rag, "embed", lambda texts: [[0.1, 0.2]])
+    from app import retrieval
+
+    monkeypatch.setattr(retrieval.rag, "embed", lambda texts: [[0.1, 0.2]])
     monkeypatch.setattr(
-        main.db,
-        "search",
+        retrieval.db,
+        "vector_search",
         lambda vec, k: [
             {"chunk_id": 1, "document_id": 7, "title": "Doc", "content": "x", "score": 0.9}
         ],
     )
-    response = client.post("/search", json={"query": "hello", "k": 3})
+    response = client.post("/search", json={"query": "hello", "k": 3, "mode": "vector"})
     assert response.status_code == 200
     assert response.json()[0]["document_id"] == 7
 

@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 
 from app import db, rag
 from app.config import get_settings
+from app.retrieval import Mode, retrieve
 
 app = FastAPI(title="RAG Platform", version="0.1.0")
 
@@ -21,12 +22,14 @@ class DocumentOut(BaseModel):
 class SearchIn(BaseModel):
     query: str = Field(min_length=1)
     k: int = Field(default=5, ge=1, le=50)
+    mode: Mode = Mode.hybrid
 
 
 class SearchHit(BaseModel):
     chunk_id: int
     document_id: int
     title: str
+    source: str | None = None
     content: str
     score: float
 
@@ -47,5 +50,4 @@ def ingest(doc: DocumentIn) -> DocumentOut:
 
 @app.post("/search", response_model=list[SearchHit])
 def search(body: SearchIn) -> list[SearchHit]:
-    [query_vector] = rag.embed([body.query])
-    return [SearchHit(**hit) for hit in db.search(query_vector, body.k)]
+    return [SearchHit(**hit) for hit in retrieve(body.query, body.k, body.mode)]
