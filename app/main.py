@@ -1,6 +1,6 @@
 import time
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
 from app import answer as answering
@@ -45,10 +45,32 @@ def health() -> dict:
 @app.post("/documents", response_model=DocumentOut, status_code=201)
 def ingest(doc: DocumentIn) -> DocumentOut:
     settings = get_settings()
-    chunks = rag.chunk_text(doc.text, settings.chunk_size, settings.chunk_overlap)
+    chunks = rag.chunk_markdown(doc.text, settings.chunk_size, settings.chunk_overlap)
     vectors = rag.embed(chunks)
     doc_id = db.insert_document(doc.title, doc.source, chunks, vectors)
     return DocumentOut(document_id=doc_id, chunks=len(chunks))
+
+
+@app.post("/documents/upload", response_model=DocumentOut, status_code=201)
+async def upload(file: UploadFile, source: str | None = None) -> DocumentOut:
+    if not (file.filename or "").lower().endswith((".md", ".markdown", ".txt")):
+        raise HTTPException(415, "Only .md and .txt files are supported")
+    text = (await file.read()).decode("utf-8", errors="replace")
+    if not text.strip():
+        raise HTTPException(422, "File is empty")
+    title = file.filename.rsplit(".", 1)[0]
+    return ingest(DocumentIn(title=title, text=text, source=source or file.filename))
+
+
+@app.get("/documents")
+def list_documents() -> list[dict]:
+    return db.list_documents()
+
+
+@app.delete("/documents/{document_id}", status_code=204)
+def delete_document(document_id: int) -> None:
+    if not db.delete_document(document_id):
+        raise HTTPException(404, "Document not found")
 
 
 @app.post("/search", response_model=list[SearchHit])

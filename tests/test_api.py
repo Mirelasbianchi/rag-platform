@@ -42,3 +42,16 @@ def test_hashing_embeddings_are_deterministic_and_normalized():
     assert a == b
     assert abs(np.linalg.norm(a) - 1) < 1e-5
     assert np.dot(a, b) > np.dot(a, c)
+
+
+def test_chunk_markdown_keeps_heading_context():
+    from app.rag import chunk_markdown
+
+    text = "# Lei\n\n## Capítulo I\n\nTexto um.\n\n## Capítulo II\n\nTexto dois."
+    chunks = chunk_markdown(text, size=200, overlap=20)
+    assert chunks == ["Lei > Capítulo I\nTexto um.", "Lei > Capítulo II\nTexto dois."]
+
+
+def test_upload_rejects_unsupported_files():
+    response = client.post("/documents/upload", files={"file": ("a.exe", b"x")})
+    assert response.status_code == 415
