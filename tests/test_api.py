@@ -55,3 +55,9 @@ def test_chunk_markdown_keeps_heading_context():
 def test_upload_rejects_unsupported_files():
     response = client.post("/documents/upload", files={"file": ("a.exe", b"x")})
     assert response.status_code == 415
+
+
+def test_responses_carry_request_id_and_latency():
+    response = client.get("/health", headers={"x-request-id": "abc"})
+    assert response.headers["X-Request-ID"] == "abc"
+    assert float(response.headers["X-Response-Time-ms"]) >= 0

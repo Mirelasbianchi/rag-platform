@@ -1,4 +1,5 @@
 import time
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, UploadFile
 from pydantic import BaseModel, Field
@@ -6,9 +7,21 @@ from pydantic import BaseModel, Field
 from app import answer as answering
 from app import db, rag
 from app.config import get_settings
+from app.observability import RequestLogMiddleware, setup_logging
 from app.retrieval import Mode, retrieve
 
-app = FastAPI(title="RAG Platform", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    settings = get_settings()
+    setup_logging(settings.log_level)
+    if settings.init_schema_on_startup:
+        db.init_schema()
+    yield
+
+
+app = FastAPI(title="RAG Platform", version="0.2.0", lifespan=lifespan)
+app.add_middleware(RequestLogMiddleware)
 
 
 class DocumentIn(BaseModel):
@@ -40,6 +53,16 @@ class SearchHit(BaseModel):
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/ready")
+def ready() -> dict:
+    """Readiness: the database answers. Used by the load balancer health check."""
+    try:
+        db.ping()
+    except Exception as exc:
+        raise HTTPException(503, f"database unavailable: {type(exc).__name__}") from exc
+    return {"status": "ready", "embedding_model": get_settings().embedding_model}
 
 
 @app.post("/documents", response_model=DocumentOut, status_code=201)
