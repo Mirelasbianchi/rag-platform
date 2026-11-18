@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     embedding_dim: int = 1536
     chunk_size: int = 800
     chunk_overlap: int = 100
+    llm_model: str | None = None  # e.g. anthropic/claude-sonnet-4-5; unset = extractive
 
 
 @lru_cache

@@ -1,6 +1,9 @@
+import time
+
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
+from app import answer as answering
 from app import db, rag
 from app.config import get_settings
 from app.retrieval import Mode, retrieve
@@ -51,3 +54,38 @@ def ingest(doc: DocumentIn) -> DocumentOut:
 @app.post("/search", response_model=list[SearchHit])
 def search(body: SearchIn) -> list[SearchHit]:
     return [SearchHit(**hit) for hit in retrieve(body.query, body.k, body.mode)]
+
+
+class AskIn(BaseModel):
+    question: str = Field(min_length=1)
+    k: int = Field(default=4, ge=1, le=20)
+    mode: Mode = Mode.hybrid
+
+
+class Citation(BaseModel):
+    n: int
+    chunk_id: int
+    document_id: int
+    title: str
+    source: str | None = None
+    content: str
+
+
+class AskOut(BaseModel):
+    answer: str
+    strategy: str
+    citations: list[Citation]
+    latency_ms: float
+
+
+@app.post("/ask", response_model=AskOut)
+def ask(body: AskIn) -> AskOut:
+    start = time.perf_counter()
+    hits = retrieve(body.question, body.k, body.mode)
+    text, strategy = answering.answer(body.question, hits, get_settings().llm_model)
+    citations = [
+        Citation(n=i, **{key: hit[key] for key in Citation.model_fields if key != "n"})
+        for i, hit in enumerate(hits, start=1)
+    ]
+    latency = round((time.perf_counter() - start) * 1000, 1)
+    return AskOut(answer=text, strategy=strategy, citations=citations, latency_ms=latency)
